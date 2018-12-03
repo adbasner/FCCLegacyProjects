@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+
+        body, html {
+            height: 100%;
+            margin: 0px;
+            color: white;
+
+        }
+
+        .bg {
+            background-color: lightblue;
+            height: 100%;
+            position: relative;
+            color: black;
+            font-family: sans;
+            color: white;
+
+        }
+
+        #cToF {
+          background-color: blue;
+          color: white;
+          border: blue;
+          border-radius: 8px;
+          padding: 10px;
+          font-size: 18px;
+        }
+
+
+
+
+
+        .weatherData {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            border: #333 solid 2px;
+            border-radius: 5%;
+            background-color: #333;
+            padding: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            min-width: 400px;
+        }
+
+    </style>
+
+    <title>Local Weather</title>
+
+</head>
+
+<body>
+    <div class="bg">
+      <div class="weatherData">
+
+      <div class="welcome">
+          <h1>The world's best weather finder.</h1>
+          <!--  <<p id="demo"></p> -->
+        </div>
+        <br>
+        <div class="output">
+          <p id="output"></p>
+        </div>
+        <br>
+        <div class="convert">
+          <p>Click the button to change the temperature units.</p><br>
+          <button id="cToF">Convert Temp</button>
+        </div>
+
+
+      </div>
+    </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+/* var x = document.getElementById("demo");
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+    x.innerHTML = "Latitude: " + position.coords.latitude +
+    "<br>Longitude: " + position.coords.longitude;
+}
+*/
+
+
+$(document).ready(function(){
+
+  var lats;
+  var longs;
+  var location;
+  //var x = document.getElementById("demo");
+  //var y = document.getElementById("jsonText");
+
+  function getLocation() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+          x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+  }
+  function showPosition(position) {
+      /*x.innerHTML = "Latitude: " + position.coords.latitude +
+      "<br>Longitude: " + position.coords.longitude; */
+      lats = position.coords.latitude;
+      longs = position.coords.longitude;
+      var location = "https://fcc-weather-api.glitch.me/api/current?lat=" + lats + "&lon=" + longs;
+
+      var obj;
+
+      $.getJSON(location, function (json){
+        obj = json;
+        var output;
+        output = "<p>Today's weather in " + obj.name + ", " + obj.sys.country + ".</p>";
+        output += "<p id='tempC'>Temp: <span class='unitC'>" + obj.main.temp + " &#176C</span>" + "</p>";
+        output += "<p>Sky: " + obj.weather[0].description + ".</p>";
+        output += "<p><img src='" + obj.weather[0].icon + "' alt='weather icon'>" + "</p>";
+        $("#output").html(output);
+
+      });
+
+      $("#cToF").on("click", function() {
+          var temp = obj.main.temp;
+          var newTemp;
+          if ($('.unitC').length){
+
+            var newTemp = temp*1.8 + 32;
+            temp = newTemp;
+            $('.unitC').html(temp + " &#176F");
+            $('.unitC').removeClass('unitC').addClass('unitF');
+          } else if ($('.unitF').length) {
+            $('.unitF').html(temp + " &#176C");
+            $('.unitF').removeClass('unitF').addClass('unitC');
+          }
+      });
+/*
+      $("#jsonWbutton").on("click",function() {
+        $.getJSON(location, function(json) {
+          $("#jsonText").html(JSON.stringify(json));
+        });
+      });*/
+  };
+  getLocation();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0px;
+            text-shadow: 1px 1px 1px black;
+        }
+
+        .bg {
+            background-image: url("aaron-burden-149692.jpg");
+            height: 100%;
+            background-position: center;
+            background-size: cover;
+            position: relative;
+            color: white;
+            font-family: "Courier New", Courier, monospace;
+
+        }
+
+
+
+        .info {
+            position: absolute;
+            bottom: 0px;
+            left: 15px;
+            font-size: 16px;
+        }
+
+        .quote {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            border: #333 solid 2px;
+            border-radius: 5%;
+            background-color: #ccc;
+            padding: 50px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        hr {
+            margin: 20px;
+            width: 100%;
+        }
+
+        #qbutton {
+            padding: 10px;
+            color: #fff;
+            background-color: dodgerblue;
+            border-radius: 3%;
+
+        }
+
+        .tweetButton {
+          border-radius: 3%;
+          border-color: dodgerblue;
+          background-color: white;
+        }
+    </style>
+
+    <title>Random Quote Generator</title>
+
+</head>
+
+<body>
+    <div class="bg">
+
+
+        <div class="quote">
+                <h4>Click to get a random quote</h4>
+                <button id="qbutton">New Quote</button>
+                <hr>
+                <p id="quote"></p>
+              <p id ="author"></p>
+
+<br>
+
+
+<button class="tweetButton" id="tweet" style="font-size:24px">Tweet <i class="fa fa-twitter-square" style="font-size:24px;color:dodgerblue"></i></button>
+
+        </div>
+
+        <div class="info">
+            <p>Photo by Aaron Burden on Unsplash</p>
+        </div>
+    </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+
+var quote;
+var author;
+function quoteChanger(){
+  $.ajax({
+    url:'https://api.forismatic.com/api/1.0/?method=getQuote&format=jsonp&lang=en',
+
+    jsonp:'jsonp',
+    dataType:'jsonp',
+    success: function(response) {
+         quote=response.quoteText;
+         author=response.quoteAuthor;
+       $('#quote').text('"'+quote+'"');
+      if(author) {
+
+       $('#author').text('- '+author);
+    } else {
+      $('#author').text('- '+ 'A Wise Man');
+    }
+
+
+  }
+  });
+}
+
+
+$('#qbutton').on('click',function(){
+
+
+ quoteChanger();
+
+
+});
+
+$('#tweet').on('click',function(){
+        window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent('"' + quote + '"' + ' ' + '-' + ' '  author))
+});
+});
+</script>
+</body>
+</html>
